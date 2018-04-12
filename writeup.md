@@ -55,7 +55,7 @@ It can be seen that some classes occur more frequently than others.
 
 ### Design and Test a Model Architecture
 
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. 
 
 Here is an example of a traffic sign image before and after preprocessing.
 
@@ -83,7 +83,8 @@ My final model consisted of the following layers:
 | Max pooling	      	| 2x2 stride,  outputs 14x14x6   
 | Convolution 5x5     	| 1x1 stride, valid padding, outputs 10x10x16
 | RELU and dropout		|
-| Max pooling	      	| 2x2 stride,  outputs 5x5x16   
+| Max pooling	      	| 2x2 stride,  outputs 5x5x16
+| Flatten               | outputs = 400   
 | RELU and dropout		|                            
 | Fully connected		| outputs = 120
 | RELU and dropout		|                                        
@@ -95,7 +96,7 @@ My final model consisted of the following layers:
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an AdamOptimizer with a batch size of 128, 100 epochs and a learning rate of 0.001. Dropout was set to 0.8.
+To train the model, I used an AdamOptimizer with a batch size of 128, 50 epochs and a learning rate of 0.001. Dropout was set to 0.6.
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
@@ -132,33 +133,107 @@ Here are the results of the prediction:
 
   Class | Image			        |     Prediction	        					| 
  :-----:|:---------------------:|:---------------------------------------------:| 
-     1  | Speed limit (30km/h)  | Speed limit (30km/h)n   						| 
+     1  | Speed limit (30km/h)  | Speed limit (30km/h)   						| 
     35  | Ahead only     	    | Ahead only 									|
-     3  | Speed limit (60km/h)	| No passing for vehicles over 3.5 metric tons	|
-    34  | Turn left ahead  		| Turn left ahead								|
+     3  | Speed limit (60km/h)	| No passing                                	|
+    34  | Turn left ahead  		| Keep right								    |
     37  | Go straight or left	| Go straight or left      						|
     22  | Bumpy road			| Bumpy road             						|
     14  | Stop			        | Stop              							|
     18  | General caution		| General caution      							|
 
-The model was able to correctly guess 7 of the 8 traffic signs, which gives an accuracy of 87.5%. This compares favorably to the accuracy on the test set of 94.0%
+The model was able to correctly guess 6 of the 8 traffic signs, which gives an accuracy of 75.0%. In my opinion this compares favorably to the accuracy on the test set of 94.0%
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. 
 
 The code for making predictions on my final model is located in the 10th and 12th cell of the Ipython notebook.
 
+##### Traffic Sign: Speed limit (30km/h) 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Speed limit (30km/h)                          |              0.891756 |
+| Roundabout mandatory                          |              0.097194 |
+| Speed limit (20km/h)                          |              0.006038 |
+| Priority road                                 |              0.002213 |
+| Speed limit (50km/h)                          |              0.001248 |
+
 For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-|  .99         			| Speed limit (30km/h)n   						| 
-| 1.00    				| Ahead only 									|
-|  .77					| No passing for vehicles over 3.5 metric tons	|
-|  .99	      			| Turn left ahead					 			|
-| 1.00				    | Go straight or left  							|
-|  .99				    | Bumpy road         							|
-|  .98				    | Stop              							|
-| 1.00				    | General caution      							|
+##### Traffic Sign: Ahead only 
+##### Top 5 probabilities:
 
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Ahead only                                    |              0.999783 |
+| Yield                                         |              0.000075 |
+| Turn left ahead                               |              0.000067 |
+| Speed limit (60km/h)                          |              0.000041 |
+| Go straight or right                          |              0.000019 |
 
-For the second image ... 
+##### Traffic Sign: Speed limit (60km/h) 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| No passing                                    |              0.607145 |
+| No passing for vehicles over 3.5 metric tons  |              0.128009 |
+| Ahead only                                    |              0.063933 |
+| Speed limit (60km/h)                          |              0.037691 |
+| Yield                                         |              0.015939 |
+
+##### Traffic Sign: Turn left ahead 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Keep right                                    |              0.999227 |
+| Turn left ahead                               |              0.000773 |
+| Go straight or right                          |              0.000000 |
+| Yield                                         |              0.000000 |
+| General caution                               |              0.000000 |
+
+##### Traffic Sign: Go straight or left 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Go straight or left                           |              0.999578 |
+| Traffic signals                               |              0.000140 |
+| Roundabout mandatory                          |              0.000133 |
+| General caution                               |              0.000079 |
+| Turn right ahead                              |              0.000025 |
+
+##### Traffic Sign: Bumpy road 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Bumpy road                                    |              0.952507 |
+| Bicycles crossing                             |              0.042324 |
+| Road work                                     |              0.001893 |
+| Traffic signals                               |              0.001217 |
+| Road narrows on the right                     |              0.001119 |
+
+##### Traffic Sign: Stop 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| Stop                                          |              0.999832 |
+| Keep right                                    |              0.000092 |
+| Turn left ahead                               |              0.000021 |
+| Yield                                         |              0.000019 |
+| Turn right ahead                              |              0.000017 |
+
+##### Traffic Sign: General caution 
+##### Top 5 probabilities:
+
+|  Prediction                                   |  Probabilities        |
+|:---------------------------------------------:|:---------------------:|
+| General caution                               |              0.998715 |
+| Traffic signals                               |              0.001177 |
+| Pedestrians                                   |              0.000107 |
+| Right-of-way at the next intersection         |              0.000001 |
+| Go straight or left                           |              0.000000 |

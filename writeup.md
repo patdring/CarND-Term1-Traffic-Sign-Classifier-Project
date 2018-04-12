@@ -104,18 +104,7 @@ My final model results were:
 * validation set accuracy of 0.956  
 * test set accuracy of 0.940
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
-
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+My first implementation was LeNet-5 shown in the udacity TensorFlow Neural Network Lab. The recognition of traffic signs and handwritten letters seemed to me to be a comparable task with very similar requirements. First I used all image color channels (32, 32, 3) and got a validation set accuracy of 0.88. Then I began to grayscale and normalized the input data. The validation set accuracy still not reached 0.93 so I decided to implement the dropout mechanism. This helped to reach a validation set accuracy > 0.93. Training for more than 50 epochs do not increase the validation accuracy. I trained the network 100 epochs but it didn't make much difference. That the accuracies of test and validation are not far apart is for me a sign that the model fulfils its purpose. The pictures from the web later confirmed this again. 
 
 ### Test a Model on New Images
 
@@ -125,24 +114,24 @@ Here are eight German traffic signs that I found on the web:
 
 ![alt text][image4]
 
-The first image might be difficult to classify because ...
+The third image (Speed limit (60km/h)) may be difficult for the model to see. The actual traffic sign is small in relation to the surroundings but I wanted to see the models limits. All other traffic signs should be recognized or at least listed among the top 5 probabilities.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set 
 
 Here are the results of the prediction:
 
-  Class | Image			        |     Prediction	        					| 
- :-----:|:---------------------:|:---------------------------------------------:| 
-     1  | Speed limit (30km/h)  | Speed limit (30km/h)   						| 
-    35  | Ahead only     	    | Ahead only 									|
-     3  | Speed limit (60km/h)	| No passing                                	|
-    34  | Turn left ahead  		| Keep right								    |
-    37  | Go straight or left	| Go straight or left      						|
-    22  | Bumpy road			| Bumpy road             						|
-    14  | Stop			        | Stop              							|
-    18  | General caution		| General caution      							|
+| Image                 |Prediction                                     |
+|:---------------------:|:---------------------------------------------:|
+| Speed limit (30km/h)  | Speed limit (30km/h)   						| 
+| Ahead only     	    | Ahead only 									|
+| Speed limit (60km/h)	| No passing                                	|
+| Turn left ahead  		| Keep right								    |
+| Go straight or left	| Go straight or left      						|
+| Bumpy road			| Bumpy road             						|
+| Stop			        | Stop              							|
+| General caution		| General caution      							|
 
-The model was able to correctly guess 6 of the 8 traffic signs, which gives an accuracy of 75.0%. In my opinion this compares favorably to the accuracy on the test set of 94.0%
+The model was able to correctly guess 6 of the 8 traffic signs, which gives an accuracy of 75.0%. In my opinion this compares favorably to the accuracy on the test set of 94.0% considering the small number of 8 test images, one of which was deliberately "bad".
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. 
 
@@ -159,7 +148,7 @@ The code for making predictions on my final model is located in the 10th and 12t
 | Priority road                                 |              0.002213 |
 | Speed limit (50km/h)                          |              0.001248 |
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+The model is sure to have found the right traffic sign with a probability of 0.89. The gap to the second prediction is large.
 
 ##### Traffic Sign: Ahead only 
 ##### Top 5 probabilities:
@@ -172,6 +161,8 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Speed limit (60km/h)                          |              0.000041 |
 | Go straight or right                          |              0.000019 |
 
+The model is very likely to have found the right traffic sign. The other predictions are almost negligible.
+
 ##### Traffic Sign: Speed limit (60km/h) 
 ##### Top 5 probabilities:
 
@@ -182,6 +173,8 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Ahead only                                    |              0.063933 |
 | Speed limit (60km/h)                          |              0.037691 |
 | Yield                                         |              0.015939 |
+
+Here the model is wrong with a probability of 0.61 for "No passing". The correct traffic sign appears in the top 5, but with a small probability of 0.037.
 
 ##### Traffic Sign: Turn left ahead 
 ##### Top 5 probabilities:
@@ -194,6 +187,9 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Yield                                         |              0.000000 |
 | General caution                               |              0.000000 |
 
+Here the model is total wrong with a probability of 0.999 for "Keep right". The correct traffic sign appears in the top 5, but with a small probability of 0.000773.
+To misinterpret these two traffic signs (left ahead vs. keep right) is very bad.
+
 ##### Traffic Sign: Go straight or left 
 ##### Top 5 probabilities:
 
@@ -204,6 +200,8 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Roundabout mandatory                          |              0.000133 |
 | General caution                               |              0.000079 |
 | Turn right ahead                              |              0.000025 |
+
+The model is very likely to have found the right traffic sign. The other predictions are almost negligible.
 
 ##### Traffic Sign: Bumpy road 
 ##### Top 5 probabilities:
@@ -216,6 +214,8 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Traffic signals                               |              0.001217 |
 | Road narrows on the right                     |              0.001119 |
 
+The model is very likely to have found the right traffic sign. The other predictions are almost negligible.
+
 ##### Traffic Sign: Stop 
 ##### Top 5 probabilities:
 
@@ -227,6 +227,8 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Yield                                         |              0.000019 |
 | Turn right ahead                              |              0.000017 |
 
+The model is very likely to have found the right traffic sign. The other predictions are almost negligible.
+
 ##### Traffic Sign: General caution 
 ##### Top 5 probabilities:
 
@@ -237,3 +239,5 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 | Pedestrians                                   |              0.000107 |
 | Right-of-way at the next intersection         |              0.000001 |
 | Go straight or left                           |              0.000000 |
+
+The model is very likely to have found the right traffic sign. The other predictions are almost negligible.
